@@ -1,6 +1,6 @@
 # An application for Ruby-China in Flutter
 
-[](/UI.png)
+![Ruby-China in Flutter](/UI.png)
 
 ## [api doc](https://api.ruby-china.org/)
 
