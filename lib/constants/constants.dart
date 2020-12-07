@@ -24,8 +24,9 @@ const jsonPath = '.json';
 
 class RequestPath {
   TopicPath topic;
+  UserPath user;
 
-  RequestPath(this.topic);
+  RequestPath(this.topic, this.user);
 }
 
 class TopicPath {
@@ -36,9 +37,20 @@ class TopicPath {
   );
 }
 
+class UserPath {
+  String basePath;
+
+  UserPath(
+    this.basePath,
+  );
+}
+
 var apiPath = RequestPath(
   TopicPath(
     '/api/v3/topics',
+  ),
+  UserPath(
+    '/api/v3/users',
   ),
 );
 
@@ -79,7 +91,7 @@ initDio() {
       },
       // 接口成功返回时处理
       onResponse: (Response resp) {
-        print('执行成功');
+        print(resp);
         hideLoadingDialog();
         return resp;
       },

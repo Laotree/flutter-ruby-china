@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_auth/model/topic.dart';
+import 'package:flutter_auth/components/text_field_container.dart';
 import 'package:flutter_auth/model/user.dart';
+import 'package:flutter_auth/utils/html_util.dart';
+import 'package:flutter_auth/utils/web_util.dart';
 
 import '../../../../constants/constants.dart';
 
@@ -22,16 +24,19 @@ class UserIndexPage extends StatefulWidget {
 
 class _UserIndexPageState extends State<UserIndexPage> {
   User _user;
+  User _userDetail;
+  Size _size;
 
   _UserIndexPageState(User user) {
     this._user = user;
+    _getUserDetail();
   }
 
   @override
   Widget build(BuildContext context) {
+    _size = MediaQuery.of(context).size;
     String title = (_user.name == null ? _user.login : _user.name) + '主页';
 
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -41,33 +46,34 @@ class _UserIndexPageState extends State<UserIndexPage> {
       body: Container(
         child: Column(
           children: [
-            _head(size),
+            _head(),
+            _body(),
           ],
         ),
       ),
     );
   }
 
-  _head(Size size) {
+  _head() {
     return Row(children: [
       SizedBox(
-        width: size.width * 0.05,
+        width: _size.width * 0.05,
       ),
       SizedBox(
-        width: size.width * 0.2,
+        width: _size.width * 0.2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: _size.height * 0.01),
             SizedBox(
-                height: size.height * 0.07,
+                height: _size.height * 0.07,
                 child: GestureDetector(
                   onTap: () {
-                    print('onTap onTap');
+                    print('tap??tap');
                   },
                   child: Container(
-                      width: size.height * 0.08,
-                      height: size.height * 0.08,
+                      width: _size.height * 0.08,
+                      height: _size.height * 0.08,
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -75,18 +81,18 @@ class _UserIndexPageState extends State<UserIndexPage> {
                             fit: BoxFit.cover,
                           ))),
                 )),
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: _size.height * 0.01),
           ],
         ),
       ),
       SizedBox(
-        width: size.width * 0.7,
+        width: _size.width * 0.7,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: size.height * 0.02),
+            SizedBox(height: _size.height * 0.02),
             SizedBox(
-              height: size.height * 0.03,
+              height: _size.height * 0.03,
               child: Text(
                 _user.login,
                 maxLines: 2,
@@ -97,7 +103,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
               ),
             ),
             SizedBox(
-              height: size.height * 0.02,
+              height: _size.height * 0.02,
               child: Row(
                 children: [
                   SizedBox(
@@ -112,7 +118,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
                     ),
                   ),
                   SizedBox(
-                    width: size.width * 0.05,
+                    width: _size.width * 0.05,
                   ),
                   SizedBox(
                     child: Text.rich(
@@ -128,13 +134,254 @@ class _UserIndexPageState extends State<UserIndexPage> {
                 ],
               ),
             ),
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: _size.height * 0.01),
           ],
         ),
       ),
       SizedBox(
-        width: size.width * 0.05,
+        width: _size.width * 0.05,
       ),
     ]);
+  }
+
+  _body() {
+    List<Widget> children = [];
+    if (_userDetail != null) {
+      if (_userDetail.location != null) {
+        children.add(SizedBox(
+          width: _size.width * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: _size.height * 0.01),
+              SizedBox(
+                height: _size.height * 0.02,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          text: _userDetail.location,
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimarySmallFontSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: _size.width * 0.05,
+                    ),
+                    SizedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          text: _userDetail.company,
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimarySmallFontSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: _size.height * 0.01),
+            ],
+          ),
+        ));
+      }
+      if (_userDetail.website != null && _userDetail.website.length > 0) {
+        children.add(SizedBox(
+          child: Column(
+            children: [
+              SizedBox(
+                width: _size.width * 0.05,
+              ),
+              SizedBox(
+                  width: _size.width * 0.9,
+                  child: Column(
+                    children: [
+                      TextFieldContainer(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            HtmlViewPage(
+                              html: _userDetail.bio,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                width: _size.width * 0.05,
+              )
+            ],
+          ),
+        ));
+      }
+      // "topics_count":51,"replies_count":409,"following_count":4,"followers_count":41,"favorites_count":8,
+      if (_userDetail.topicsCount > 0 && _userDetail.repliesCount > 0) {
+        children.add(SizedBox(
+          width: _size.width * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: _size.height * 0.01),
+              SizedBox(
+                height: _size.height * 0.05,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          text: '话题: ' + _userDetail.topicsCount.toString(),
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimaryMiddleFontSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: _size.height * 0.01),
+            ],
+          ),
+        ));
+        children.add(SizedBox(
+          width: _size.width * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: _size.height * 0.01),
+              SizedBox(
+                height: _size.height * 0.05,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          text: '回帖: ' + _userDetail.repliesCount.toString(),
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimaryMiddleFontSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: _size.height * 0.01),
+            ],
+          ),
+        ));
+
+        children.add(SizedBox(
+          width: _size.width * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: _size.height * 0.01),
+              SizedBox(
+                height: _size.height * 0.05,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          text: '收藏: ' + _userDetail.favoritesCount.toString(),
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimaryMiddleFontSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: _size.height * 0.01),
+            ],
+          ),
+        ));
+        children.add(SizedBox(
+          width: _size.width * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: _size.height * 0.01),
+              SizedBox(
+                height: _size.height * 0.05,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          text:
+                              '正在关注: ' + _userDetail.followingCount.toString(),
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimaryMiddleFontSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: _size.height * 0.01),
+            ],
+          ),
+        ));
+        children.add(SizedBox(
+          width: _size.width * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: _size.height * 0.01),
+              SizedBox(
+                height: _size.height * 0.05,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      child: Text.rich(
+                        TextSpan(
+                          text: '关注者: ' + _userDetail.followersCount.toString(),
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimaryMiddleFontSize,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: _size.height * 0.01),
+            ],
+          ),
+        ));
+      }
+    }
+
+    return Column(
+      children: children,
+    );
+  }
+
+  _getUserDetail() async {
+    Response response = await dio.get(
+      apiHost + apiPath.user.basePath + '/' + _user.login + jsonPath,
+    );
+    if (response == null || response.statusCode != httpStatusOk) {
+      return;
+    }
+    UserData userData = UserData.fromJson(response.data);
+    _userDetail = userData.user;
+    this.setState(() {});
   }
 }

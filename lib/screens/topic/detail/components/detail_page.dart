@@ -7,8 +7,6 @@ import 'package:flutter_auth/screens/topic/detail/components/reply_list_page.dar
 import 'package:flutter_auth/screens/user/index/index_screen.dart';
 import 'package:flutter_auth/utils/html_util.dart';
 import 'package:flutter_auth/utils/thumb_util.dart';
-import 'package:flutter_auth/utils/web_util.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 import '../../../../constants/constants.dart';
 
