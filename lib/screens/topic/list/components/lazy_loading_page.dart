@@ -24,7 +24,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
   int _limit = 10;
   bool _hasMore = true;
   String _selectedType = 'last_actived';
-  String _selectedTypeDesc = '默认';
+  String _selectedTypeDesc = '最近活跃';
   List<String> _typeList = [
     'last_actived',
     'recent',
@@ -32,37 +32,18 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
     'last_reply',
     'excellent'
   ];
-  List<String> _typeDescList = ['默认', '最新发布', '无人问津', '最新回复', '精华帖'];
+  List<String> _typeDescList = ['最近活跃', '最新发布', '无人问津', '最新回复', '精华帖'];
+  int _selectedTypeIndex = 0;
+
+  ///文本标签集合
+  List<String> _nodeDescList = ['新手问题', '招聘', 'Rails', 'Gem'];
+  List<int> _nodeIDList = [52, 25, 2, 3];
+  int _selectedNodeIndex;
+  int _selectedNodeID;
+
   List<Widget> _drawerChildren = new List<Widget>();
 
   _LazyLoadingPageState() {
-    _drawerChildren.add(DrawerHeader(
-      child: Text(
-        '话题筛选',
-        style:
-            TextStyle(color: kPrimaryColor, fontSize: kPrimaryMiddleFontSize),
-      ),
-      decoration: BoxDecoration(
-        color: kPrimaryLightColor,
-      ),
-    ));
-
-    for (String _typeDesc in _typeDescList) {
-      _drawerChildren.add(ListTile(
-        title: Text(
-          _typeDesc,
-          style: TextStyle(color: kPrimaryColor, fontSize: kPrimaryFontSize),
-        ),
-        onTap: () {
-          _selectedTypeDesc = _typeDesc;
-          _selectedType = _typeList[_typeDescList.indexOf(_typeDesc)];
-          this._title = _selectedTypeDesc;
-          Navigator.pop(context);
-          _onRefresh();
-        },
-      ));
-    }
-
     this._title = _selectedTypeDesc;
     if (_offset == 0) {
       _getMoreData();
@@ -129,7 +110,8 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
       queryParameters: {
         "offset": _offset,
         "limit": _limit,
-        "type": _selectedType
+        "type": _selectedType,
+        "node_id": _selectedNodeID,
       },
     );
     if (response == null || response.statusCode != httpStatusOk) {
@@ -145,6 +127,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
     if (topicsData.topics.length < _limit) {
       _hasMore = false;
     }
+    _buildDrawerChildren();
     this.setState(() {});
   }
 
@@ -163,5 +146,111 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
       },
       itemCount: _myList.length + 1,
     );
+  }
+
+  _buildDrawerChildren() {
+    _drawerChildren.clear();
+    _drawerChildren.add(DrawerHeader(
+      child: Text(
+        '话题筛选',
+        style:
+            TextStyle(color: kPrimaryColor, fontSize: kPrimaryMiddleFontSize),
+      ),
+      decoration: BoxDecoration(
+        color: kPrimaryLightColor,
+      ),
+    ));
+
+    for (var i = 0; i < _typeDescList.length; i++) {
+      var str = _typeDescList[i];
+      if (i == _selectedTypeIndex) {
+        _drawerChildren.add(ListTile(
+          title: Row(
+            children: [
+              Icon(
+                Icons.radio_button_checked_rounded,
+                color: kPrimaryColor,
+              ),
+              Text(
+                str,
+                style:
+                    TextStyle(color: kPrimaryColor, fontSize: kPrimaryFontSize),
+              ),
+            ],
+          ),
+          onTap: () {
+            _selectedTypeDesc = _typeDescList[0];
+            _selectedType = _typeList[0];
+            this._title = _selectedTypeDesc;
+            Navigator.pop(context);
+            _onRefresh();
+          },
+        ));
+      } else {
+        _drawerChildren.add(ListTile(
+          title: Row(
+            children: [
+              Icon(
+                Icons.radio_button_off_rounded,
+                color: kPrimaryLightColor,
+              ),
+              Text(
+                str,
+                style:
+                    TextStyle(color: kPrimaryColor, fontSize: kPrimaryFontSize),
+              ),
+            ],
+          ),
+          onTap: () {
+            _selectedTypeDesc = str;
+            _selectedType = _typeList[i];
+            this._title = _selectedTypeDesc;
+            _selectedTypeIndex = i;
+            Navigator.pop(context);
+            _onRefresh();
+          },
+        ));
+      }
+    }
+    List<Widget> itemWidgetList = [];
+    for (var i = 0; i < _nodeDescList.length; i++) {
+      var str = _nodeDescList[i];
+      if (i == _selectedNodeIndex) {
+        itemWidgetList.add(GestureDetector(
+          onTap: () {
+            _selectedNodeIndex = null;
+            _selectedNodeID = null;
+            Navigator.pop(context);
+            _onRefresh();
+          },
+          child: TextTagWidget("$str",
+              textStyle: TextStyle(color: kPrimaryLightColor),
+              backgroundColor: kPrimaryColor),
+        ));
+      } else {
+        itemWidgetList.add(GestureDetector(
+          onTap: () {
+            _selectedNodeIndex = i;
+            _selectedNodeID = _nodeIDList[i];
+            Navigator.pop(context);
+            _onRefresh();
+          },
+          child: TextTagWidget("$str",
+              textStyle: TextStyle(color: kPrimaryColor),
+              backgroundColor: kPrimaryLightColor),
+        ));
+      }
+    }
+    _drawerChildren.add(Container(
+      margin: EdgeInsets.only(top: 10.0, left: 5, right: 5),
+
+      ///流式布局
+      child: Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+
+          ///子标签
+          children: itemWidgetList),
+    ));
   }
 }
