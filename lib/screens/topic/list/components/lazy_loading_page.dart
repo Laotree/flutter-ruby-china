@@ -38,7 +38,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
   _LazyLoadingPageState() {
     _drawerChildren.add(DrawerHeader(
       child: Text(
-        _selectedTypeDesc,
+        '话题筛选',
         style:
             TextStyle(color: kPrimaryColor, fontSize: kPrimaryMiddleFontSize),
       ),
