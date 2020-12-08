@@ -20,6 +20,8 @@ const httpStatusOk = 200;
 
 const apiHost = 'https://ruby-china.org';
 
+const twitterLink = 'https://twitter.com/';
+const githubLink = 'https://github.com/';
 const jsonPath = '.json';
 
 class RequestPath {

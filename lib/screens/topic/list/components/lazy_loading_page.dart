@@ -3,22 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_auth/components/toast/toast.dart';
 import 'package:flutter_auth/model/topic.dart';
-
+import 'package:flutter_tag_layout/flutter_tag_layout.dart';
 import '../../../../constants/constants.dart';
 import 'list_item.dart';
 
 class LazyLoadingPage extends StatefulWidget {
-  final String title;
-
   LazyLoadingPage({
     Key key,
-    this.title,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => new _LazyLoadingPageState(
-        title,
-      );
+  State<StatefulWidget> createState() => new _LazyLoadingPageState();
 }
 
 class _LazyLoadingPageState extends State<LazyLoadingPage> {
@@ -28,10 +23,46 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
   int _offset = 0;
   int _limit = 10;
   bool _hasMore = true;
+  String _selectedType = 'last_actived';
+  String _selectedTypeDesc = '最近活跃';
+  List<String> _typeList = [
+    'last_actived',
+    'recent',
+    'no_reply',
+    'last_reply',
+    'excellent'
+  ];
+  List<String> _typeDescList = ['最近活跃', '最新发布', '无人问津', '最新回复', '精华帖'];
+  List<Widget> _drawerChildren = new List<Widget>();
 
-  _LazyLoadingPageState(String title) {
-    print('title=$title' + '_offset=$_offset');
-    this._title = title;
+  _LazyLoadingPageState() {
+    _drawerChildren.add(DrawerHeader(
+      child: Text(
+        _selectedTypeDesc,
+        style:
+            TextStyle(color: kPrimaryColor, fontSize: kPrimaryMiddleFontSize),
+      ),
+      decoration: BoxDecoration(
+        color: kPrimaryLightColor,
+      ),
+    ));
+
+    for (String _typeDesc in _typeDescList) {
+      _drawerChildren.add(ListTile(
+        title: Text(
+          _typeDesc,
+          style: TextStyle(color: kPrimaryColor, fontSize: kPrimaryFontSize),
+        ),
+        onTap: () {
+          _selectedTypeDesc = _typeDesc;
+          _selectedType = _typeList[_typeDescList.indexOf(_typeDesc)];
+          Navigator.pop(context);
+          _onRefresh();
+        },
+      ));
+    }
+
+    this._title = _selectedTypeDesc;
     if (_offset == 0) {
       _getMoreData();
     }
@@ -70,6 +101,13 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
         onRefresh: () => _onRefresh(),
         child: _buildList(),
       ),
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: _drawerChildren,
+        ),
+      ),
     );
   }
 
@@ -87,7 +125,11 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
   _getCurrentPage(bool refresh) async {
     Response response = await dio.get(
       apiHost + apiPath.topic.basePath + jsonPath,
-      queryParameters: {"offset": _offset, "limit": _limit},
+      queryParameters: {
+        "offset": _offset,
+        "limit": _limit,
+        "type": _selectedType
+      },
     );
     if (response == null || response.statusCode != httpStatusOk) {
       return;

@@ -7,6 +7,7 @@ import 'package:flutter_auth/utils/html_util.dart';
 import 'package:flutter_auth/utils/web_util.dart';
 
 import '../../../../constants/constants.dart';
+import 'icon_text.dart';
 
 class UserIndexPage extends StatefulWidget {
   final User user;
@@ -90,7 +91,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: _size.height * 0.02),
+            SizedBox(height: _size.height * 0.01),
             SizedBox(
               height: _size.height * 0.03,
               child: Text(
@@ -100,6 +101,24 @@ class _UserIndexPageState extends State<UserIndexPage> {
                   color: kPrimaryColor,
                   fontSize: kPrimaryFontSize,
                 ),
+              ),
+            ),
+            SizedBox(
+              height: _size.height * 0.02,
+              child: Row(
+                children: [
+                  SizedBox(
+                    child: Text.rich(
+                      TextSpan(
+                        text: _user.name,
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: kPrimarySmallFontSize,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -120,17 +139,6 @@ class _UserIndexPageState extends State<UserIndexPage> {
                   SizedBox(
                     width: _size.width * 0.05,
                   ),
-                  SizedBox(
-                    child: Text.rich(
-                      TextSpan(
-                        text: _user.name,
-                        style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: kPrimarySmallFontSize,
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -147,51 +155,43 @@ class _UserIndexPageState extends State<UserIndexPage> {
   _body() {
     List<Widget> children = [];
     if (_userDetail != null) {
-      if (_userDetail.location != null) {
-        children.add(SizedBox(
-          width: _size.width * 0.8,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: _size.height * 0.01),
-              SizedBox(
-                height: _size.height * 0.02,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      child: Text.rich(
-                        TextSpan(
-                          text: _userDetail.location,
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: kPrimarySmallFontSize,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: _size.width * 0.05,
-                    ),
-                    SizedBox(
-                      child: Text.rich(
-                        TextSpan(
-                          text: _userDetail.company,
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: kPrimarySmallFontSize,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: _size.height * 0.01),
-            ],
-          ),
+      if (_userDetail.location != null && _userDetail.location.length > 0) {
+        children.add(IconTextPage(
+          size: _size,
+          icon: Icons.location_city_rounded,
+          link: _userDetail.location,
+        ));
+      }
+      if (_userDetail.company != null && _userDetail.company.length > 0) {
+        children.add(IconTextPage(
+          size: _size,
+          icon: Icons.backpack_rounded,
+          link: _userDetail.company,
+        ));
+      }
+      if (_userDetail.twitter != null && _userDetail.twitter.length > 0) {
+        children.add(IconTextPage(
+          size: _size,
+          icon: Icons.chat_rounded,
+          link: twitterLink + _userDetail.twitter,
+        ));
+      }
+      if (_userDetail.github != null && _userDetail.github.length > 0) {
+        children.add(IconTextPage(
+          size: _size,
+          icon: Icons.code,
+          link: githubLink + _userDetail.github,
         ));
       }
       if (_userDetail.website != null && _userDetail.website.length > 0) {
+        children.add(IconTextPage(
+          size: _size,
+          icon: Icons.web,
+          link: _userDetail.website,
+        ));
+      }
+
+      if (_userDetail.bio != null && _userDetail.bio.length > 0) {
         children.add(SizedBox(
           child: Column(
             children: [
@@ -239,7 +239,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
                           text: '话题: ' + _userDetail.topicsCount.toString(),
                           style: TextStyle(
                             color: kPrimaryColor,
-                            fontSize: kPrimaryMiddleFontSize,
+                            fontSize: kPrimaryFontSize,
                           ),
                         ),
                       ),
@@ -267,7 +267,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
                           text: '回帖: ' + _userDetail.repliesCount.toString(),
                           style: TextStyle(
                             color: kPrimaryColor,
-                            fontSize: kPrimaryMiddleFontSize,
+                            fontSize: kPrimaryFontSize,
                           ),
                         ),
                       ),
@@ -279,7 +279,6 @@ class _UserIndexPageState extends State<UserIndexPage> {
             ],
           ),
         ));
-
         children.add(SizedBox(
           width: _size.width * 0.8,
           child: Column(
@@ -296,7 +295,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
                           text: '收藏: ' + _userDetail.favoritesCount.toString(),
                           style: TextStyle(
                             color: kPrimaryColor,
-                            fontSize: kPrimaryMiddleFontSize,
+                            fontSize: kPrimaryFontSize,
                           ),
                         ),
                       ),
@@ -325,7 +324,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
                               '正在关注: ' + _userDetail.followingCount.toString(),
                           style: TextStyle(
                             color: kPrimaryColor,
-                            fontSize: kPrimaryMiddleFontSize,
+                            fontSize: kPrimaryFontSize,
                           ),
                         ),
                       ),
@@ -353,7 +352,7 @@ class _UserIndexPageState extends State<UserIndexPage> {
                           text: '关注者: ' + _userDetail.followersCount.toString(),
                           style: TextStyle(
                             color: kPrimaryColor,
-                            fontSize: kPrimaryMiddleFontSize,
+                            fontSize: kPrimaryFontSize,
                           ),
                         ),
                       ),

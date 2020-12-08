@@ -68,21 +68,22 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
           children: [
             SizedBox(height: _size.height * 0.01),
             SizedBox(
-                height: _size.height * 0.07,
-                child: GestureDetector(
-                  onTap: () {
-                    _gotoUserIndexPage(context, _topic.user);
-                  },
-                  child: Container(
-                      width: _size.height * 0.08,
-                      height: _size.height * 0.08,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(_topic.user.avatarUrl),
-                            fit: BoxFit.cover,
-                          ))),
-                )),
+              height: _size.height * 0.07,
+              child: GestureDetector(
+                onTap: () {
+                  _gotoUserIndexPage(context, _topic.user);
+                },
+                child: Container(
+                    width: _size.height * 0.08,
+                    height: _size.height * 0.08,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: NetworkImage(_topic.user.avatarUrl),
+                          fit: BoxFit.cover,
+                        ))),
+              ),
+            ),
             SizedBox(height: _size.height * 0.01),
           ],
         ),

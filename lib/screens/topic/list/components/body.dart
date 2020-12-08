@@ -9,7 +9,6 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LazyLoadingPage(
-      title: '话题列表',
     );
   }
 }

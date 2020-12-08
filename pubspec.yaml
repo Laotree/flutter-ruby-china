@@ -30,6 +30,7 @@ dependencies:
   shared_preferences: ^0.5.12+4
   flutter_html: ^1.1.0
   webview_flutter: ^1.0.7
+  flutter_tag_layout: ^0.0.3
 
 
 dev_dependencies:
