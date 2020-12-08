@@ -44,7 +44,7 @@ class IconTextPage extends StatelessWidget {
                 SizedBox(
                   child: GestureDetector(
                     onTap: () {
-                      if (!'link'.contains('http')) {
+                      if (!link.contains('http')) {
                         print('$link is not a link');
                         return;
                       }
