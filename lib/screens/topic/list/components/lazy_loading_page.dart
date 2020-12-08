@@ -24,7 +24,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
   int _limit = 10;
   bool _hasMore = true;
   String _selectedType = 'last_actived';
-  String _selectedTypeDesc = '最近活跃';
+  String _selectedTypeDesc = '默认';
   List<String> _typeList = [
     'last_actived',
     'recent',
@@ -32,7 +32,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
     'last_reply',
     'excellent'
   ];
-  List<String> _typeDescList = ['最近活跃', '最新发布', '无人问津', '最新回复', '精华帖'];
+  List<String> _typeDescList = ['默认', '最新发布', '无人问津', '最新回复', '精华帖'];
   List<Widget> _drawerChildren = new List<Widget>();
 
   _LazyLoadingPageState() {
@@ -56,6 +56,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
         onTap: () {
           _selectedTypeDesc = _typeDesc;
           _selectedType = _typeList[_typeDescList.indexOf(_typeDesc)];
+          this._title = _selectedTypeDesc;
           Navigator.pop(context);
           _onRefresh();
         },
