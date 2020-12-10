@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/components/toast/toast.dart';
 import 'package:flutter_auth/constants/constants.dart';
 import 'package:flutter_auth/model/reply.dart';
 import 'package:flutter_auth/model/topic.dart';
@@ -33,12 +34,21 @@ class ActionPage extends StatelessWidget {
       );
     }
     if (reply.action == 'mention') {
+      String text = actionMap[reply.action];
+      if (reply.mentionTopic != null) {
+        text = reply.mentionTopic.lastReplyUserLogin +
+            '在' +
+            reply.mentionTopic.title +
+            text;
+      }
       return GestureDetector(
         onTap: () {
           _gotoTopicsDetailPage(context, reply.mentionTopic);
         },
-        child: Text(reply.mentionTopic.lastReplyUserLogin+ '在' + reply.mentionTopic.title + actionMap[reply.action],
-          style: TextStyle(color: kPrimaryColor),),
+        child: Text(
+          text,
+          style: TextStyle(color: kPrimaryColor),
+        ),
       );
     } else {
       return Text(
@@ -49,7 +59,12 @@ class ActionPage extends StatelessWidget {
   }
 
   void _gotoTopicsDetailPage(BuildContext context, Topic topic) async {
-    String url =  apiHost + apiPath.topic.basePath + '/' + topic.id.toString() + jsonPath;
+    if (topic == null) {
+      dangerToast('帖子被删了');
+      return;
+    }
+    String url =
+        apiHost + apiPath.topic.basePath + '/' + topic.id.toString() + jsonPath;
     Response response = await dio.get(url);
     if (response == null || response.statusCode != httpStatusOk) {
       return;

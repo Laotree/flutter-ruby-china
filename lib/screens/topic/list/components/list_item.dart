@@ -1,10 +1,10 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/model/topic.dart';
 import 'package:flutter_auth/model/user.dart';
 import 'package:flutter_auth/screens/topic/detail/detail_screen.dart';
 import 'package:flutter_auth/screens/user/index/index_screen.dart';
+import 'package:flutter_tag_layout/flutter_tag_layout.dart';
 
 import '../../../../constants/constants.dart';
 
@@ -50,45 +50,58 @@ class ListItemCard extends StatelessWidget {
         ),
       ),
       SizedBox(
-          width: size.width * 0.7,
+          width: size.width * 0.72,
           child: GestureDetector(
             onTap: () {
               _gotoTopicsDetailPage(context, topic);
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                SizedBox(height: size.height * 0.01),
                 SizedBox(
-                  height: size.height * 0.05,
-                  child: Text(
-                    topic.title,
-                    maxLines: 2,
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: kPrimaryFontSize,
-                    ),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.005),
-                SizedBox(
-                  height: size.height * 0.015,
-                  child: Text.rich(
-                    TextSpan(
-                      text: topic.updatedAt,
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: kPrimarySmallFontSize,
+                  width: size.width * 0.6,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: size.height * 0.01),
+                      SizedBox(
+                        height: size.height * 0.05,
+                        child: Text(
+                          topic.title,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: kPrimaryFontSize,
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: size.height * 0.005),
+                      SizedBox(
+                        height: size.height * 0.015,
+                        child: Text.rich(
+                          TextSpan(
+                            text: topic.updatedAt,
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: kPrimarySmallFontSize,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: size.height * 0.01),
+                    ],
                   ),
                 ),
-                SizedBox(height: size.height * 0.01),
+                SizedBox(
+                  width: size.width * 0.12,
+                  child: TextTagWidget(topic.repliesCount.toString(),
+                      textStyle: TextStyle(color: kPrimaryColor),
+                      backgroundColor: kPrimaryLightColor),
+                ),
               ],
             ),
           )),
       SizedBox(
-        width: size.width * 0.05,
+        width: size.width * 0.03,
       ),
     ]);
   }
@@ -107,7 +120,8 @@ class ListItemCard extends StatelessWidget {
   }
 
   void _gotoTopicsDetailPage(BuildContext context, Topic topic) async {
-   String url =  apiHost + apiPath.topic.basePath + '/' + topic.id.toString() + jsonPath;
+    String url =
+        apiHost + apiPath.topic.basePath + '/' + topic.id.toString() + jsonPath;
     Response response = await dio.get(url);
     if (response == null || response.statusCode != httpStatusOk) {
       return;

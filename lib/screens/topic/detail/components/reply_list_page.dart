@@ -10,29 +10,31 @@ import '../../../../constants/constants.dart';
 
 class ReplyLoadingPage extends StatefulWidget {
   final Topic topic;
+  final ScrollController scrollController;
 
-  ReplyLoadingPage({
-    Key key,
-    this.topic,
-  }) : super(key: key);
+  ReplyLoadingPage({Key key, this.topic, this.scrollController})
+      : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => new _ReplyLoadingPageState(topic);
+  State<StatefulWidget> createState() =>
+      new _ReplyLoadingPageState(topic, scrollController);
 }
 
 class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
   Topic _topic;
   List<Reply> _myList = new List<Reply>();
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController;
   int _offset = 0;
   int _limit = 10;
   bool _hasMore = true;
 
-  _ReplyLoadingPageState(Topic topic) {
+  _ReplyLoadingPageState(Topic topic, ScrollController scrollController) {
     this._topic = topic;
+    this._scrollController = scrollController;
     if (_offset == 0) {
       _getMoreData();
     }
+    // fixme list block
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -46,6 +48,7 @@ class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
           _getMoreData();
         } else {
           print('下拉了，但是没有下一页');
+          commonToast('没有更老的回复了');
         }
       }
     });
@@ -53,25 +56,14 @@ class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => _onRefresh(),
-      child: _buildList(),
-    );
+    return _buildList();
   }
 
   _getMoreData() {
-    _getCurrentPage(false);
-    _offset = _offset + _limit;
+    _getCurrentPage();
   }
 
-  _onRefresh() async {
-    print('上啦');
-    // _offset = 0;
-    // _getCurrentPage(true);
-    // _offset = _offset + _limit;
-  }
-
-  _getCurrentPage(bool refresh) async {
+  _getCurrentPage() async {
     Response response = await dio.get(
       apiHost +
           apiPath.topic.basePath +
@@ -85,15 +77,18 @@ class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
       return;
     }
     RepliesData repliesData = RepliesData.fromJson(response.data);
-    if (refresh) {
-      _myList.clear();
-    }
+
     repliesData.replies.forEach((t) {
       _myList.add(t);
     });
     if (repliesData.replies.length < _limit) {
       _hasMore = false;
+      _offset = _offset + repliesData.replies.length;
+    } else {
+      _hasMore = true;
+      _offset = _offset + _limit;
     }
+
     this.setState(() {});
   }
 
@@ -101,8 +96,7 @@ class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      controller: _scrollController,
-      // itemExtent: 80,
+      physics: new NeverScrollableScrollPhysics(),
       itemBuilder: (context, i) {
         if (i == _myList.length) {
           return CupertinoActivityIndicator();

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_auth/components/toast/toast.dart';
+import 'package:flutter_auth/model/node.dart';
 import 'package:flutter_auth/model/topic.dart';
 import 'package:flutter_tag_layout/flutter_tag_layout.dart';
 import '../../../../constants/constants.dart';
@@ -36,8 +37,8 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
   int _selectedTypeIndex = 0;
 
   ///文本标签集合
-  List<String> _nodeDescList = ['新手问题', '招聘', 'Rails', 'Gem'];
-  List<int> _nodeIDList = [52, 25, 2, 3];
+  List<String> _nodeDescList = [];
+  List<int> _nodeIDList = [];
   int _selectedNodeIndex;
   int _selectedNodeID;
 
@@ -45,6 +46,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
 
   _LazyLoadingPageState() {
     this._title = _selectedTypeDesc;
+    _getNodeList();
     if (_offset == 0) {
       _getMoreData();
     }
@@ -128,6 +130,25 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
       _hasMore = false;
     }
     _buildDrawerChildren();
+    this.setState(() {});
+  }
+
+  _getNodeList() async {
+    Response response = await dio.get(
+      apiHost + apiPath.node.basePath + jsonPath,
+    );
+    if (response == null || response.statusCode != httpStatusOk) {
+      return;
+    }
+    NodeListData nodeListData = NodeListData.fromJson(response.data);
+
+    nodeListData.nodes.forEach((n) {
+      if (n.topicsCount < 200) {
+        return;
+      }
+      _nodeDescList.add(n.name);
+      _nodeIDList.add(n.id);
+    });
     this.setState(() {});
   }
 

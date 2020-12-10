@@ -28,6 +28,9 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
   Topic _topic;
   Size _size;
 
+  ScrollController _topicController = new ScrollController();
+  ScrollController _repliesController = new ScrollController();
+
   _TopicDetailPageState(Topic topics) {
     this._topic = topics;
   }
@@ -43,12 +46,15 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
         ),
       ),
       body: SingleChildScrollView(
-        // <-- wrap this around
+        controller: _topicController,
         child: Column(
           children: [
             _head(),
             _body(),
-            ReplyLoadingPage(topic: _topic),
+            ReplyLoadingPage(
+              topic: _topic,
+              scrollController: _topicController,
+            ),
           ],
         ),
       ),

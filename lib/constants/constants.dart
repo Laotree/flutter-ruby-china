@@ -27,8 +27,9 @@ const jsonPath = '.json';
 class RequestPath {
   TopicPath topic;
   UserPath user;
+  NodePath node;
 
-  RequestPath(this.topic, this.user);
+  RequestPath(this.topic, this.user, this.node);
 }
 
 class TopicPath {
@@ -47,12 +48,23 @@ class UserPath {
   );
 }
 
+class NodePath {
+  String basePath;
+
+  NodePath(
+    this.basePath,
+  );
+}
+
 var apiPath = RequestPath(
   TopicPath(
     '/api/v3/topics',
   ),
   UserPath(
     '/api/v3/users',
+  ),
+  NodePath(
+    '/api/v3/nodes',
   ),
 );
 

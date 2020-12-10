@@ -9,7 +9,7 @@ class TopicListData {
   TopicListData({this.topics});
 
   TopicListData.fromJson(Map<String, dynamic> json) {
-    if (json['topics'] != null) {
+    if (json['topics'] != String) {
       topics = new List<Topic>();
       json['topics'].forEach((v) {
         topics.add(new Topic.fromJson(v));
@@ -19,7 +19,7 @@ class TopicListData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.topics != null) {
+    if (this.topics != String) {
       data['topics'] = this.topics.map((v) => v.toJson()).toList();
     }
     return data;
@@ -32,16 +32,17 @@ class TopicDetailData {
   TopicDetailData({this.topic});
 
   TopicDetailData.fromJson(Map<String, dynamic> json) {
-    topic = json['topic'] != null ? new Topic.fromJson(json['topic']) : null;
-    // meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
+    topic =
+        json['topic'] != String ? new Topic.fromJson(json['topic']) : String;
+    // meta = json['meta'] != String ? new Meta.fromJson(json['meta']) : String;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.topic != null) {
+    if (this.topic != String) {
       data['topic'] = this.topic.toJson();
     }
-    // if (this.meta != null) {
+    // if (this.meta != String) {
     //   data['meta'] = this.meta.toJson();
     // }
     return data;
@@ -61,7 +62,7 @@ class Topic {
   String lastReplyUserLogin;
   String grade;
   int likesCount;
-  Null suggestedAt;
+  String suggestedAt;
   String closedAt;
   bool deleted;
   User user;
@@ -113,12 +114,12 @@ class Topic {
     suggestedAt = json['suggested_at'];
     closedAt = json['closed_at'];
     deleted = json['deleted'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != String ? new User.fromJson(json['user']) : String;
     excellent = json['excellent'];
     hits = json['hits'];
-    abilities = json['abilities'] != null
+    abilities = json['abilities'] != String
         ? new Abilities.fromJson(json['abilities'])
-        : null;
+        : String;
     body = json['body'];
     bodyHtml = json['body_html'];
   }
@@ -140,12 +141,12 @@ class Topic {
     data['suggested_at'] = this.suggestedAt;
     data['closed_at'] = this.closedAt;
     data['deleted'] = this.deleted;
-    if (this.user != null) {
+    if (this.user != String) {
       data['user'] = this.user.toJson();
     }
     data['excellent'] = this.excellent;
     data['hits'] = this.hits;
-    if (this.abilities != null) {
+    if (this.abilities != String) {
       data['abilities'] = this.abilities.toJson();
     }
     data['body'] = this.body;
@@ -153,4 +154,3 @@ class Topic {
     return data;
   }
 }
-
