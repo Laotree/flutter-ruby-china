@@ -19,9 +19,10 @@ class ListItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    int titleRow = (topic.title.length / 35).round() + 1;
     return Row(children: [
       SizedBox(
-        width: size.width * 0.05,
+        width: size.width * 0.03,
       ),
       SizedBox(
         width: size.width * 0.2,
@@ -50,7 +51,7 @@ class ListItemCard extends StatelessWidget {
         ),
       ),
       SizedBox(
-          width: size.width * 0.72,
+          width: size.width * 0.74,
           child: GestureDetector(
             onTap: () {
               _gotoTopicsDetailPage(context, topic);
@@ -58,23 +59,27 @@ class ListItemCard extends StatelessWidget {
             child: Row(
               children: [
                 SizedBox(
-                  width: size.width * 0.6,
+                  width: size.width * 0.62,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: size.height * 0.01),
                       SizedBox(
-                        height: size.height * 0.05,
+                        height: size.height * 0.01,
+                      ),
+                      SizedBox(
+                        height: titleRow * size.height * 0.026,
                         child: Text(
                           topic.title,
-                          maxLines: 2,
+                          maxLines: titleRow,
                           style: TextStyle(
                             color: kPrimaryColor,
                             fontSize: kPrimaryFontSize,
                           ),
                         ),
                       ),
-                      SizedBox(height: size.height * 0.005),
+                      SizedBox(
+                        height: size.height * 0.005,
+                      ),
                       SizedBox(
                         height: size.height * 0.015,
                         child: Text.rich(
@@ -87,7 +92,9 @@ class ListItemCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: size.height * 0.01),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
                     ],
                   ),
                 ),

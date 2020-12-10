@@ -28,7 +28,7 @@ class ReplyItemCard extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Row(children: [
       SizedBox(
-        width: size.width * 0.05,
+        width: size.width * 0.03,
       ),
       SizedBox(
         width: size.width * 0.2,
@@ -68,7 +68,7 @@ class ReplyItemCard extends StatelessWidget {
         ),
       ),
       SizedBox(
-        width: size.width * 0.7,
+        width: size.width * 0.74,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -112,7 +112,7 @@ class ReplyItemCard extends StatelessWidget {
         ),
       ),
       SizedBox(
-        width: size.width * 0.05,
+        width: size.width * 0.03,
       ),
     ]);
   }

@@ -155,7 +155,7 @@ class _LazyLoadingPageState extends State<LazyLoadingPage> {
   _buildList() {
     return ListView.builder(
       controller: _scrollController,
-      itemExtent: 80,
+      shrinkWrap: true,
       itemBuilder: (context, i) {
         if (i == _myList.length) {
           return CupertinoActivityIndicator();
