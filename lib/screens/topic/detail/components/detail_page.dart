@@ -131,6 +131,13 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                     width: _size.width * 0.05,
                   ),
                   SizedBox(
+                    width: _size.width * 0.15,
+                    child: ThumbPage(
+                      count: _topic.hits,
+                      icon: Icons.remove_red_eye_rounded,
+                    ),
+                  ),
+                  SizedBox(
                     width: _size.width * 0.1,
                     child: ThumbPage(count: _topic.likesCount),
                   ),

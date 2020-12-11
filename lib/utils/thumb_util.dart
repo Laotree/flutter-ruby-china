@@ -3,10 +3,12 @@ import 'package:flutter_auth/constants/constants.dart';
 
 class ThumbPage extends StatelessWidget {
   final int count;
+  final IconData icon;
 
   const ThumbPage({
     Key key,
     this.count,
+    this.icon = Icons.thumb_up_rounded,
   }) : super(key: key);
 
   @override
@@ -16,13 +18,13 @@ class ThumbPage extends StatelessWidget {
     }
     return Row(
       children: [
-        Text(count.toString() + ' x ',
+        Text(count.toString() + ' ',
             style: TextStyle(
               color: kPrimaryColor,
               fontSize: kPrimarySmallFontSize,
             )),
         Icon(
-          Icons.thumb_up,
+          icon,
           color: kPrimaryColor,
           size: kPrimarySmallFontSize,
         ),
