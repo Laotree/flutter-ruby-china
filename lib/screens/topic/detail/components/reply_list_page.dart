@@ -38,8 +38,8 @@ class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        if (_myList.length < _offset) {
-          commonToast('没有更老的回复了');
+        if (_myList.length == 0) {
+          commonToast('暂无回复');
           return;
         }
         if (_hasMore) {
@@ -83,11 +83,10 @@ class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
     });
     if (repliesData.replies.length < _limit) {
       _hasMore = false;
-      _offset = _offset + repliesData.replies.length;
     } else {
       _hasMore = true;
-      _offset = _offset + _limit;
     }
+    _offset = _offset + _limit;
 
     this.setState(() {});
   }
