@@ -19,7 +19,6 @@ class ListItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    int titleRow = (topic.title.length / 35).round() + 1;
     return Row(children: [
       SizedBox(
         width: size.width * 0.03,
@@ -57,60 +56,82 @@ class ListItemCard extends StatelessWidget {
               _gotoTopicsDetailPage(context, topic);
             },
             child: Row(
-              children: [
-                SizedBox(
-                  width: size.width * 0.62,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: size.height * 0.01,
-                      ),
-                      SizedBox(
-                        height: titleRow * size.height * 0.026,
-                        child: Text(
-                          topic.title,
-                          maxLines: titleRow,
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: kPrimaryFontSize,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.005,
-                      ),
-                      SizedBox(
-                        height: size.height * 0.015,
-                        child: Text.rich(
-                          TextSpan(
-                            text: topic.updatedAt,
-                            style: TextStyle(
-                              color: kPrimaryColor,
-                              fontSize: kPrimarySmallFontSize,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: size.height * 0.01,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: size.width * 0.12,
-                  child: TextTagWidget(topic.repliesCount.toString(),
-                      textStyle: TextStyle(color: kPrimaryColor),
-                      backgroundColor: kPrimaryLightColor),
-                ),
-              ],
+              children: _buildChildren(size),
             ),
           )),
       SizedBox(
         width: size.width * 0.03,
       ),
     ]);
+  }
+
+  _buildChildren(size) {
+    int titleRow = (topic.title.length / 35).round() + 1;
+    List<SizedBox> children = new List<SizedBox>();
+    double excellentWidth = 0;
+    if (topic.grade == 'excellent') {
+      excellentWidth = 0.04;
+    }
+    children.add(SizedBox(
+      width: size.width * (0.62 - excellentWidth),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          SizedBox(
+            height: titleRow * size.height * 0.026,
+            child: Text(
+              topic.title,
+              maxLines: titleRow,
+              style: TextStyle(
+                color: kPrimaryColor,
+                fontSize: kPrimaryFontSize,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.005,
+          ),
+          SizedBox(
+            height: size.height * 0.015,
+            child: Text.rich(
+              TextSpan(
+                text: topic.updatedAt,
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  fontSize: kPrimarySmallFontSize,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+        ],
+      ),
+    ));
+    if (excellentWidth > 0) {
+      children.add(SizedBox(
+        width: size.width * (excellentWidth - 0.02),
+        child: Icon(
+          Icons.bookmark_rounded,
+          color: kPrimaryColor,
+          size: kPrimaryFontSize,
+        ),
+      ));
+      children.add(SizedBox(
+        width: size.width * 0.02,
+      ));
+    }
+    children.add(SizedBox(
+      width: size.width * 0.12,
+      child: TextTagWidget(topic.repliesCount.toString(),
+          textStyle: TextStyle(color: kPrimaryColor),
+          backgroundColor: kPrimaryLightColor),
+    ));
+    return children;
   }
 
   void _gotoUserIndexPage(BuildContext context, User user) {

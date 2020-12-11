@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_auth/components/text_field_container.dart';
+import 'package:flutter_auth/components/toast/toast.dart';
 import 'package:flutter_auth/model/topic.dart';
 import 'package:flutter_auth/model/user.dart';
 import 'package:flutter_auth/screens/topic/detail/components/reply_list_page.dart';
@@ -29,7 +30,6 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
   Size _size;
 
   ScrollController _topicController = new ScrollController();
-  ScrollController _repliesController = new ScrollController();
 
   _TopicDetailPageState(Topic topics) {
     this._topic = topics;
@@ -128,7 +128,24 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                     ),
                   ),
                   SizedBox(
-                    width: _size.width * 0.05,
+                    width: _size.width * 0.04,
+                    child: _topic.grade == 'excellent'
+                        ? SizedBox(
+                            child: GestureDetector(
+                              onTap: () {
+                                commonToast('精华帖');
+                              },
+                              child: Icon(
+                                Icons.bookmark_rounded,
+                                color: kPrimaryColor,
+                                size: kPrimaryFontSize,
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
+                  ),
+                  SizedBox(
+                    width: _size.width * 0.01,
                   ),
                   SizedBox(
                     width: _size.width * 0.15,
