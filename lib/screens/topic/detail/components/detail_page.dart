@@ -101,7 +101,7 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
           children: [
             SizedBox(height: _size.height * 0.02),
             SizedBox(
-              height: titleRow * _size.height * 0.026,
+              height: titleRow * _size.height * 0.032,
               child: Text(
                 _topic.title,
                 maxLines: titleRow,

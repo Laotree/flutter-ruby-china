@@ -81,7 +81,7 @@ class ListItemCard extends StatelessWidget {
             height: size.height * 0.01,
           ),
           SizedBox(
-            height: titleRow * size.height * 0.026,
+            height: titleRow * size.height * 0.032,
             child: Text(
               topic.title,
               maxLines: titleRow,

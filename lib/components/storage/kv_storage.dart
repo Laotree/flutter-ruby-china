@@ -10,7 +10,6 @@ class Storage {
     if (prefs == null) {
       initSharedPreferences().then((value) => print('初始化kv存储'));
     }
-    return _checkIsAuthValid();
   }
 
   int getInt(String key) {

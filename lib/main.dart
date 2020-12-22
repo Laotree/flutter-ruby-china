@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    bool isAuthValid= storage.init();
+    storage.init();
     initDio();
     initActionMap();
     initHtmlStyleMap();
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: isAuthValid?TopicListScreen():WelcomeScreen(),
+      home: WelcomeScreen(),
     );
   }
 
