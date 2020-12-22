@@ -1,3 +1,4 @@
+import 'package:flutter_auth/constants/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 SharedPreferences prefs;
@@ -5,10 +6,11 @@ SharedPreferences prefs;
 final storage = Storage();
 
 class Storage {
-  void init() {
+  bool init() {
     if (prefs == null) {
       initSharedPreferences().then((value) => print('初始化kv存储'));
     }
+    return _checkIsAuthValid();
   }
 
   int getInt(String key) {
@@ -46,4 +48,20 @@ class Storage {
 
 Future<void> initSharedPreferences() async {
   prefs = await SharedPreferences.getInstance();
+}
+bool _checkIsAuthValid() {
+  String accessToken = storage.getString(storageKey.accessToken);
+  if (accessToken!=null &&accessToken.length>0) {
+    return true;
+  }
+  String authCode = storage.getString(storageKey.authCode);
+  if (authCode!=null &&authCode.length>0) {
+    _loginByCode();
+    return true;
+  }
+  return false;
+}
+
+_loginByCode() {
+
 }

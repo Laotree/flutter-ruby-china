@@ -5,6 +5,7 @@ import 'package:flutter_auth/components/button/secondary_rounded_button.dart';
 import 'package:flutter_auth/components/toast/toast.dart';
 import 'package:flutter_auth/constants/constants.dart';
 import 'package:flutter_auth/screens/topic/list/list_screen.dart';
+import 'package:flutter_auth/utils/web_util.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -26,7 +27,19 @@ class Body extends StatelessWidget {
             RoundedButton(
               text: "登录",
               press: () {
-                commonToast('暂未开发');
+                String url = 'https://ruby-china.org/oauth/authorize?client_id=a4246458&redirect_uri=https%3A%2F%2Fraypar.cn%2F&response_type=code&scope=all';
+                // String url = apiHost+'/oauth/authorize?client_id='+appID+'&redirect_uri='+callBackUri+'&response_type=code&scope=all';
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return WebViewPage(
+                        url: url,
+                        title: url,
+                      );
+                    },
+                  ),
+                );
               },
             ),
             SecondaryRoundedButton(

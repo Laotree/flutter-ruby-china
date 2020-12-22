@@ -17,6 +17,7 @@ class HtmlViewPage extends StatelessWidget {
       data: html,
       style: htmlStyleMap,
       onLinkTap: (url) {
+        print('onLinkTap:'+url);
         Navigator.push(
           context,
           MaterialPageRoute(

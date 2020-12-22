@@ -48,7 +48,7 @@ class _ReplyLoadingPageState extends State<ReplyLoadingPage> {
           _getMoreData();
         } else {
           print('下拉了，但是没有下一页');
-          commonToast('没有更老的回复了');
+          commonToast('没有更新的回复了');
         }
       }
     });

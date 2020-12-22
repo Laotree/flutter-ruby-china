@@ -20,6 +20,10 @@ const httpStatusOk = 200;
 
 const apiHost = 'https://ruby-china.org';
 
+// author 2.0
+const callBackUri = 'https://raypar.cn/';
+const appID = 'a4246458';
+
 const twitterLink = 'https://twitter.com/';
 const githubLink = 'https://github.com/';
 const jsonPath = '.json';
@@ -69,24 +73,18 @@ var apiPath = RequestPath(
 );
 
 class StorageKey {
-  String rememberMobileNumber;
-  String mobileNumber;
-  String password;
-  String token;
+  String authCode;
+  String accessToken;
 
   StorageKey(
-    this.rememberMobileNumber,
-    this.mobileNumber,
-    this.password,
-    this.token,
+    this.authCode,
+    this.accessToken,
   );
 }
 
 var storageKey = StorageKey(
-  'REMEMBER_MOBILE_NUMBER',
-  'MOBILE_NUMBER',
-  'PASSWORD',
-  'TOKEN',
+  'AUTH_CODE',
+  'ACCESS_TOKEN',
 );
 
 Dio dio;
