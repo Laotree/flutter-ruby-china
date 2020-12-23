@@ -1,4 +1,4 @@
-class Abilities {
+class Ability {
   bool update;
   bool destroy;
   bool ban;
@@ -8,7 +8,7 @@ class Abilities {
   bool close;
   bool open;
 
-  Abilities(
+  Ability(
       {this.update,
       this.destroy,
       this.ban,
@@ -18,7 +18,7 @@ class Abilities {
       this.close,
       this.open});
 
-  Abilities.fromJson(Map<String, dynamic> json) {
+  Ability.fromJson(Map<String, dynamic> json) {
     update = json['update'];
     destroy = json['destroy'];
     ban = json['ban'];

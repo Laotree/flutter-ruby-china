@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/style.dart';
-
+import 'package:flutter_auth/components/storage/kv_storage.dart';
 import '../components/dialog/dialog.dart';
 import '../components/toast/toast.dart';
 
@@ -21,19 +21,32 @@ const httpStatusOk = 200;
 const apiHost = 'https://ruby-china.org';
 
 // author 2.0
-const callBackUri = 'https://raypar.cn/';
-const appID = 'a4246458';
+const clientID = 'a4246458';
 
 const twitterLink = 'https://twitter.com/';
 const githubLink = 'https://github.com/';
 const jsonPath = '.json';
 
 class RequestPath {
+  AuthPath auth;
   TopicPath topic;
   UserPath user;
   NodePath node;
 
-  RequestPath(this.topic, this.user, this.node);
+  RequestPath(
+    this.auth,
+    this.topic,
+    this.user,
+    this.node,
+  );
+}
+
+class AuthPath {
+  String token;
+
+  AuthPath(
+    this.token,
+  );
 }
 
 class TopicPath {
@@ -61,6 +74,9 @@ class NodePath {
 }
 
 var apiPath = RequestPath(
+  AuthPath(
+    '/oauth/token'
+  ),
   TopicPath(
     '/api/v3/topics',
   ),
@@ -73,18 +89,21 @@ var apiPath = RequestPath(
 );
 
 class StorageKey {
-  String authCode;
+  String refreshToken;
   String accessToken;
+  String rememberMe;
 
   StorageKey(
-    this.authCode,
+    this.refreshToken,
     this.accessToken,
+    this.rememberMe,
   );
 }
 
 var storageKey = StorageKey(
-  'AUTH_CODE',
+  'REFRESH_TOKEN',
   'ACCESS_TOKEN',
+  'REMEMBER_ME',
 );
 
 Dio dio;
@@ -97,6 +116,12 @@ initDio() {
     InterceptorsWrapper(
       // 接口请求前数据处理
       onRequest: (options) {
+        // TODO 如果accessToken 存在，则把accessToken放在query
+        String accessToken = storage.getString(storageKey.accessToken);
+        if (accessToken != null && accessToken.isNotEmpty) {
+          print('登录状态$accessToken');
+          options.queryParameters.addAll({"access_token": accessToken});
+        }
         print('执行ing');
         showLoadingDialog(options.extra["context"]);
         return options;

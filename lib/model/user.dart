@@ -25,7 +25,7 @@ class User {
   String login;
   String name;
   String avatarUrl;
-  Abilities abilities;
+  Ability abilities;
   String location;
   String company;
   String twitter;
@@ -88,7 +88,7 @@ class User {
     bio = json['bio'];
     email = json['email'];
     abilities = json['abilities'] != String
-        ? new Abilities.fromJson(json['abilities'])
+        ? new Ability.fromJson(json['abilities'])
         : String;
   }
 

@@ -39,7 +39,7 @@ class Reply {
   Null targetType;
   bool deleted;
   User user;
-  Abilities abilities;
+  Ability abilities;
   Topic mentionTopic;
 
   Reply(
@@ -70,7 +70,7 @@ class Reply {
     deleted = json['deleted'];
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
     abilities = json['abilities'] != null
-        ? new Abilities.fromJson(json['abilities'])
+        ? new Ability.fromJson(json['abilities'])
         : null;
     mentionTopic = json['mention_topic'] != null ? new Topic.fromJson(json['mention_topic']) : null;
   }

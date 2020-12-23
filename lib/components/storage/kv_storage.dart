@@ -53,7 +53,7 @@ bool _checkIsAuthValid() {
   if (accessToken!=null &&accessToken.length>0) {
     return true;
   }
-  String authCode = storage.getString(storageKey.authCode);
+  String authCode = storage.getString(storageKey.refreshToken);
   if (authCode!=null &&authCode.length>0) {
     _loginByCode();
     return true;

@@ -21,6 +21,18 @@ class ActionPage extends StatelessWidget {
     if (reply == null || reply.action == 'null') {
       return Column();
     }
+    if (reply.deleted) {
+      String text = '该回帖已被删除';
+      return GestureDetector(
+        onTap: () {
+          // _gotoTopicsDetailPage(context, reply.mentionTopic);
+        },
+        child: Text(
+          text,
+          style: TextStyle(color: kPrimaryColor),
+        ),
+      );
+    }
     if (actionMap[reply.action] == null) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,

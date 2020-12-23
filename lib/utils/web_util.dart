@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/components/storage/kv_storage.dart';
-import 'package:flutter_auth/constants/constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewPage extends StatefulWidget {
@@ -42,9 +40,6 @@ class _WebViewState extends State<WebViewPage> {
                 print(res); // 是否能返回上一级
               });
               web.currentUrl().then((url) {
-                if (url.startsWith(callBackUri)) {
-                  print('got u~~~~');
-                }
                 print('currentUrl:' + url); // 返回当前url
               });
               web.canGoForward().then((res) {
@@ -53,11 +48,6 @@ class _WebViewState extends State<WebViewPage> {
             },
             onPageFinished: (String value) {
               // webview 页面加载调用
-              if (value.startsWith(callBackUri)) {
-                storage.setString(storageKey.authCode, value.split('=')[1]);
-                print('got u~~~~' + storage.getString(storageKey.authCode));
-                Navigator.pop(context);
-              }
             },
           )
         ],

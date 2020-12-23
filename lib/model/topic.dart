@@ -2,6 +2,7 @@ import 'package:flutter_auth/model/user.dart';
 import 'package:flutter_auth/utils/time_util.dart';
 
 import 'ability.dart';
+import 'meta.dart';
 
 class TopicListData {
   List<Topic> topics;
@@ -28,13 +29,14 @@ class TopicListData {
 
 class TopicDetailData {
   Topic topic;
+  Meta meta;
 
-  TopicDetailData({this.topic});
+  TopicDetailData({this.topic, this.meta});
 
   TopicDetailData.fromJson(Map<String, dynamic> json) {
     topic =
         json['topic'] != String ? new Topic.fromJson(json['topic']) : String;
-    // meta = json['meta'] != String ? new Meta.fromJson(json['meta']) : String;
+    meta = json['meta'] != String ? new Meta.fromJson(json['meta']) : String;
   }
 
   Map<String, dynamic> toJson() {
@@ -42,9 +44,9 @@ class TopicDetailData {
     if (this.topic != String) {
       data['topic'] = this.topic.toJson();
     }
-    // if (this.meta != String) {
-    //   data['meta'] = this.meta.toJson();
-    // }
+    if (this.meta != String) {
+      data['meta'] = this.meta.toJson();
+    }
     return data;
   }
 }
@@ -68,7 +70,7 @@ class Topic {
   User user;
   int excellent;
   int hits;
-  Abilities abilities;
+  Ability abilities;
 
   // in detail
   String body;
@@ -118,7 +120,7 @@ class Topic {
     excellent = json['excellent'];
     hits = json['hits'];
     abilities = json['abilities'] != String
-        ? new Abilities.fromJson(json['abilities'])
+        ? new Ability.fromJson(json['abilities'])
         : String;
     body = json['body'];
     bodyHtml = json['body_html'];
